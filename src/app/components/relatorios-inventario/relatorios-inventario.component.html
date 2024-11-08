@@ -1,0 +1,71 @@
+<h2>Relatórios de Inventário</h2>
+<p-button
+  label="Voltar"
+  icon="pi pi-arrow-left"
+  routerLink="/"
+  class="p-button-secondary"
+></p-button>
+<br /><br />
+
+<div class="filtros">
+  <span class="p-float-label">
+    <input
+      type="text"
+      pInputText
+      placeholder="Buscar por nome"
+      [(ngModel)]="filtroNome"
+      (input)="filtrarProdutos()"
+    />
+    <label for="filtroNome">Buscar por nome</label>
+  </span>
+</div>
+
+<p-table [value]="produtosFiltrados" [paginator]="true" [rows]="10">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Nome</th>
+      <th>Custo</th>
+      <th>Preço</th>
+      <th>Margem de Lucro</th>
+      <th>Quantidade</th>
+      <th>Status do Estoque</th>
+      <th>Validade</th>
+      <th>Status da Validade</th>
+      <th>Ações</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-produto>
+    <tr>
+      <td>{{ produto.nome }}</td>
+      <td>{{ produto.custo }}</td>
+      <td>{{ produto.preco }}</td>
+      <td>{{ produto.margemLucro | number : "1.2-2" }}%</td>
+      <td>{{ produto.quantidade }}</td>
+      <td>
+        <p-tag
+          [value]="obterStatusEstoque(produto.quantidade)"
+          [severity]="obterCorEstoque(produto.quantidade)"
+        ></p-tag>
+      </td>
+      <td>{{ produto.validade | date : "dd/MM/yyyy" }}</td>
+      <td>
+        <p-tag
+          [value]="obterStatusValidade(produto.validade)"
+          [severity]="obterCorValidade(produto.validade)"
+        ></p-tag>
+      </td>
+      <td class="acoes">
+        <p-button
+          icon="pi pi-pencil"
+          class="p-button-warning"
+          (click)="editarProduto(produto.id)"
+        ></p-button>
+        <p-button
+          icon="pi pi-trash"
+          class="p-button-danger"
+          (click)="excluirProduto(produto.id)"
+        ></p-button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

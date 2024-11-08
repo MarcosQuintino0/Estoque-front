@@ -1,0 +1,36 @@
+<h2>Histórico de Atualização de Produtos</h2>
+<p-button
+  label="Voltar"
+  icon="pi pi-arrow-left"
+  routerLink="/"
+  class="p-button-secondary"
+></p-button>
+
+<p-table [value]="movimentacoes" [paginator]="true" [rows]="10">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Id</th>
+      <th>Nome</th>
+      <th>Quantidade</th>
+      <th>Última Atualização</th>
+      <th>Tipo de Movimentação</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-movimentacao>
+    <tr>
+      <td>{{ movimentacao.id }}</td>
+      <td>{{ movimentacao.nomeProduto }}</td>
+      <td>{{ movimentacao.quantidadeAlterada }}</td>
+      <td>{{ movimentacao.dataMovimentacao | date : "short" }}</td>
+      <td>
+        <p-tag
+          [value]="movimentacao.tipoMovimentacao"
+          [severity]="
+            movimentacao.tipoMovimentacao === 'SAIDA' ? 'danger' : 'success'
+          "
+        >
+        </p-tag>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

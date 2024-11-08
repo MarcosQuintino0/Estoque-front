@@ -1,0 +1,53 @@
+<h2>Cadastro de Produtos</h2>
+<div class="form-cadastro">
+  <label>Nome:</label>
+  <input type="text" pInputText [(ngModel)]="produto.nome" />
+
+  <label>Descrição:</label>
+  <input type="text" pInputText [(ngModel)]="produto.descricao" />
+
+  <label>Data de Validade:</label>
+  <input type="date" pInputText [(ngModel)]="produto.validade" />
+
+  <label>Custo:</label>
+  <input
+    type="number"
+    pInputText
+    [(ngModel)]="produto.custo"
+    (input)="calcularMargemLucro()"
+    placeholder="Informe o custo"
+  />
+
+  <label>Preço:</label>
+  <input
+    type="number"
+    pInputText
+    [(ngModel)]="produto.preco"
+    (input)="calcularMargemLucro()"
+    placeholder="Informe o preço de venda"
+  />
+
+  <label>Margem de Lucro (%):</label>
+  <input
+    type="text"
+    pInputText
+    [value]="margemLucro | number : '1.2-2'"
+    disabled
+  />
+
+  <label>Quantidade:</label>
+  <input type="number" pInputText [(ngModel)]="produto.quantidade" />
+
+  <p-button
+    label="Salvar"
+    icon="pi pi-save"
+    (click)="salvarProduto()"
+    class="p-button-success"
+  ></p-button>
+  <p-button
+    label="Voltar"
+    icon="pi pi-arrow-left"
+    routerLink="/"
+    class="p-button-secondary"
+  ></p-button>
+</div>

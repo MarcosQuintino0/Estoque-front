@@ -1,0 +1,32 @@
+<h2>Atualização de Produto</h2>
+<div class="form-quantidade">
+  <label>ID do Produto:</label>
+  <input type="number" pInputText [(ngModel)]="produto.id" [disabled]="true" />
+
+  <label>Nome:</label>
+  <input type="text" pInputText [(ngModel)]="produto.nome" [disabled]="true" />
+
+  <label>Descrição:</label>
+  <input
+    type="text"
+    pInputText
+    [(ngModel)]="produto.descricao"
+    [disabled]="true"
+  />
+
+  <label>Quantidade:</label>
+  <input type="number" pInputText [(ngModel)]="produto.quantidade" />
+
+  <p-button
+    label="Atualizar"
+    icon="pi pi-refresh"
+    (click)="atualizarQuantidade()"
+    class="p-button-info"
+  ></p-button>
+  <p-button
+    label="Voltar"
+    icon="pi pi-arrow-left"
+    routerLink="/relatorios-inventario"
+    class="p-button-secondary"
+  ></p-button>
+</div>

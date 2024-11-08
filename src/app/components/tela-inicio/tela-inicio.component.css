@@ -1,0 +1,11 @@
+.tela-inicio {
+  text-align: center;
+  padding: 2rem;
+}
+
+.botoes {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}

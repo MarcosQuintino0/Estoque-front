@@ -1,0 +1,27 @@
+<h2>Cadastro de Fornecedores</h2>
+<div class="form-cadastro">
+  <label>Nome:</label>
+  <input type="text" pInputText [(ngModel)]="fornecedor.nome" />
+
+  <label>Email:</label>
+  <input type="email" pInputText [(ngModel)]="fornecedor.email" />
+
+  <label>Telefone:</label>
+  <input type="text" pInputText [(ngModel)]="fornecedor.telefone" />
+
+  <label>Endereço:</label>
+  <input type="text" pInputText [(ngModel)]="fornecedor.endereco" />
+
+  <p-button
+    label="Salvar"
+    icon="pi pi-save"
+    (click)="salvarFornecedor()"
+    class="p-button-success"
+  ></p-button>
+  <p-button
+    label="Voltar"
+    icon="pi pi-arrow-left"
+    routerLink="/fornecedores"
+    class="p-button-secondary"
+  ></p-button>
+</div>
