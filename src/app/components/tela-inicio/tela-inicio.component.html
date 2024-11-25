@@ -1,29 +1,37 @@
-<div class="tela-inicio">
-  <h1>Sistema de Estoque</h1>
-  <div class="botoes">
-    <p-button
-      label="Cadastro de Produtos"
-      icon="pi pi-plus"
-      routerLink="/cadastro-produto"
-      class="p-button-success"
-    ></p-button>
-    <p-button
-      label="Relatórios de Inventário"
-      icon="pi pi-chart-bar"
-      routerLink="/relatorios-inventario"
-      class="p-button-warning"
-    ></p-button>
-    <p-button
-      label="Histórico de Movimentação"
-      icon="pi pi-book"
-      routerLink="/historico-movimentacao"
-      class="p-button-secondary"
-    ></p-button>
-    <p-button
-      label="Gerenciar Fornecedores"
-      icon="pi pi-users"
-      routerLink="/fornecedores"
-      class="p-button-primary"
-    ></p-button>
+<!-- tela-inicio.component.html -->
+<div class="layout-wrapper">
+  <div class="content">
+    <div class="grid">
+      <div class="col-12 md:col-6 lg:col-3">
+        <p-card styleClass="h-full">
+          <p-button
+            label="Cadastro de Produtos"
+            icon="pi pi-plus"
+            [routerLink]="['/', fornecedorId, 'cadastro-produto']"
+            styleClass="p-button-success w-full"
+          ></p-button>
+        </p-card>
+      </div>
+      <div class="col-12 md:col-6 lg:col-3">
+        <p-card styleClass="h-full">
+          <p-button
+            label="Relatórios de Inventário"
+            icon="pi pi-chart-bar"
+            [routerLink]="['/', fornecedorId, 'relatorios-inventario']"
+            styleClass="p-button-warning w-full"
+          ></p-button>
+        </p-card>
+      </div>
+      <div class="col-12 md:col-6 lg:col-3">
+        <p-card styleClass="h-full">
+          <p-button
+            label="Histórico de Movimentação"
+            icon="pi pi-book"
+            [routerLink]="['/', fornecedorId, 'historico-movimentacao']"
+            styleClass="p-button-secondary w-full"
+          ></p-button>
+        </p-card>
+      </div>
+    </div>
   </div>
 </div>

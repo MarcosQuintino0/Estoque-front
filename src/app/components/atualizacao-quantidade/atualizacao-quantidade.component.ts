@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Produto, ProdutoService } from '../../services/produto.service';
 import { MovimentacaoService } from '../../services/movimentacao.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './atualizacao-quantidade.component.html',
   styleUrl: './atualizacao-quantidade.component.css',
 })
-export class AtualizacaoQuantidadeComponent {
+export class AtualizacaoQuantidadeComponent implements OnInit {
   public produto: Produto = {
     id: null,
     nome: '',
@@ -20,7 +20,10 @@ export class AtualizacaoQuantidadeComponent {
     custo: 0.0,
     preco: 0.0,
     margemLucro: 0.0,
+    fornecedorId: null,
   };
+
+  fornecedorId: number;
 
   constructor(
     private produtoService: ProdutoService,
@@ -30,23 +33,33 @@ export class AtualizacaoQuantidadeComponent {
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (id) {
-      this.buscarProduto(id);
+    this.fornecedorId = Number(
+      this.route.snapshot.paramMap.get('fornecedorId')
+    );
+    const produtoId = Number(this.route.snapshot.paramMap.get('id'));
+
+    if (!this.fornecedorId) {
+      alert('Fornecedor não identificado');
+      this.router.navigate(['/fornecedores']);
+      return;
+    }
+
+    if (produtoId) {
+      this.buscarProduto(produtoId);
     }
   }
 
-  buscarProduto(id: number): void {
-    this.produtoService.buscarPorId(id).subscribe(
-      (produto) => {
+  buscarProduto(produtoId: number): void {
+    this.produtoService.buscarPorId(this.fornecedorId, produtoId).subscribe({
+      next: (produto) => {
         this.produto = produto;
       },
-      (error) => {
+      error: (error) => {
         console.error('Erro ao buscar produto:', error);
         alert('Erro ao carregar o produto.');
-        this.router.navigate(['/relatorios-inventario']);
-      }
-    );
+        this.router.navigate([`/${this.fornecedorId}/relatorios-inventario`]);
+      },
+    });
   }
 
   atualizarQuantidade(): void {
@@ -54,34 +67,40 @@ export class AtualizacaoQuantidadeComponent {
     now.setHours(now.getHours() - 3);
 
     if (this.produto.quantidade !== null && this.produto.quantidade >= 0) {
-      // Registra a movimentação antes de atualizar o produto
+      // Registra a movimentação com o fornecedorId
       this.movimentacaoService
-        .registrarSaida(this.produto.id!, this.produto.quantidade)
-        .subscribe(
-          () => {
+        .registrarMovimentacao(
+          this.fornecedorId,
+          this.produto.id!,
+          this.produto.quantidade
+        )
+        .subscribe({
+          next: () => {
             const produtoAtualizado = {
               ...this.produto,
               atualizacao: now,
             };
 
             this.produtoService
-              .atualizar(this.produto.id!, produtoAtualizado)
-              .subscribe(
-                () => {
+              .atualizar(this.fornecedorId, this.produto.id!, produtoAtualizado)
+              .subscribe({
+                next: () => {
                   alert('Quantidade atualizada com sucesso!');
-                  this.router.navigate(['/relatorios-inventario']);
+                  this.router.navigate([
+                    `/${this.fornecedorId}/relatorios-inventario`,
+                  ]);
                 },
-                (error) => {
+                error: (error) => {
                   console.error('Erro ao atualizar o produto:', error);
                   alert('Erro ao atualizar o produto.');
-                }
-              );
+                },
+              });
           },
-          (error) => {
+          error: (error) => {
             console.error('Erro ao registrar movimentação:', error);
             alert('Erro ao registrar a movimentação.');
-          }
-        );
+          },
+        });
     }
   }
 }

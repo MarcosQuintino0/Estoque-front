@@ -1,1 +1,21 @@
-<router-outlet></router-outlet>
+<!-- app.component.html -->
+<div class="layout-wrapper">
+  <div class="header" *ngIf="showHeader">
+    <h1>Sistema de Estoque</h1>
+    <div class="user-area">
+      <span class="greeting">Olá, {{ fornecedorNome }}</span>
+      <div class="user-menu">
+        <p-menu #menu [popup]="true" [model]="menuItems"></p-menu>
+        <p-button
+          icon="pi pi-user"
+          (click)="menu.toggle($event)"
+          class="p-button-rounded p-button-text"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

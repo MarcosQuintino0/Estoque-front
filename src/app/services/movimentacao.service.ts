@@ -4,28 +4,30 @@ import { Observable } from 'rxjs';
 
 export interface Movimentacao {
   id: number;
+  fornecedorId: number;
   produtoId: number;
-  nomeProduto: String;
+  nomeProduto: string;
   quantidadeAlterada: number;
   dataMovimentacao: Date;
-  tipoMovimentacao: string; // "ENTRADA" ou "SAIDA"
+  tipoMovimentacao: string;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class MovimentacaoService {
-  private apiUrl = 'http://localhost:8080/movimentacoes';
+  private apiUrl = 'http://localhost:8080/api/fornecedores';
 
   constructor(private http: HttpClient) {}
 
-  // Listar todas as movimentacoes
-  listarTodas(): Observable<Movimentacao[]> {
-    return this.http.get<Movimentacao[]>(`${this.apiUrl}/listar-todas`);
+  listarPorFornecedor(fornecedorId: number): Observable<Movimentacao[]> {
+    return this.http.get<Movimentacao[]>(
+      `${this.apiUrl}/${fornecedorId}/movimentacoes`
+    );
   }
 
-  // Registrar uma saida de produto
-  registrarSaida(
+  registrarMovimentacao(
+    fornecedorId: number,
     produtoId: number,
     novaQuantidade: number
   ): Observable<Movimentacao> {
@@ -33,7 +35,7 @@ export class MovimentacaoService {
       .set('produtoId', produtoId.toString())
       .set('novaQuantidade', novaQuantidade.toString());
     return this.http.post<Movimentacao>(
-      `${this.apiUrl}/registrar-saida`,
+      `${this.apiUrl}/${fornecedorId}/movimentacoes/registrar`,
       null,
       { params }
     );

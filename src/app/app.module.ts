@@ -21,6 +21,12 @@ import { TagModule } from 'primeng/tag';
 import { FornecedorCadastroComponent } from './components/fornecedor-cadastro/fornecedor-cadastro.component';
 import { FornecedorListaComponent } from './components/fornecedor-lista/fornecedor-lista.component';
 import { FornecedorEdicaoComponent } from './components/fornecedor-edicao/fornecedor-edicao.component';
+import { LoginComponent } from './components/login/login.component';
+import { MessagesModule } from 'primeng/messages';
+import { MessageService } from 'primeng/api';
+import { CardModule } from 'primeng/card';
+import { MenuModule } from 'primeng/menu';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -33,9 +39,11 @@ import { FornecedorEdicaoComponent } from './components/fornecedor-edicao/fornec
     FornecedorCadastroComponent,
     FornecedorListaComponent,
     FornecedorEdicaoComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
@@ -45,8 +53,11 @@ import { FornecedorEdicaoComponent } from './components/fornecedor-edicao/fornec
     ToastModule,
     DropdownModule,
     TagModule,
+    MessagesModule,
+    CardModule,
+    MenuModule,
   ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -8,19 +8,35 @@ import { HistoricoMovimentacaoComponent } from './components/historico-movimenta
 import { FornecedorCadastroComponent } from './components/fornecedor-cadastro/fornecedor-cadastro.component';
 import { FornecedorListaComponent } from './components/fornecedor-lista/fornecedor-lista.component';
 import { FornecedorEdicaoComponent } from './components/fornecedor-edicao/fornecedor-edicao.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './services/auth-guard.service';
 
 const routes: Routes = [
-  { path: '', component: TelaInicioComponent },
-  { path: 'cadastro-produto', component: CadastroProdutoComponent },
-  { path: 'fornecedores', component: FornecedorListaComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'cadastro-fornecedor', component: FornecedorCadastroComponent },
-  { path: 'editar-fornecedor/:id', component: FornecedorEdicaoComponent },
   {
-    path: 'atualizacao-quantidade/:id',
-    component: AtualizacaoQuantidadeComponent,
+    path: ':fornecedorId',
+    canActivate: [AuthGuard],
+    children: [
+      { path: '', component: TelaInicioComponent }, // Tela inicial dentro da área protegida
+      {
+        path: 'relatorios-inventario',
+        component: RelatoriosInventarioComponent,
+      },
+      { path: 'cadastro-produto', component: CadastroProdutoComponent },
+      {
+        path: 'atualizacao-quantidade/:id',
+        component: AtualizacaoQuantidadeComponent,
+      },
+      {
+        path: 'historico-movimentacao',
+        component: HistoricoMovimentacaoComponent,
+      },
+      { path: 'editar-perfil', component: FornecedorEdicaoComponent },
+    ],
   },
-  { path: 'relatorios-inventario', component: RelatoriosInventarioComponent },
-  { path: 'historico-movimentacao', component: HistoricoMovimentacaoComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' }, // Redireciona para login se não houver rota
+  { path: '**', redirectTo: 'login' }, // Rota para página não encontrada
 ];
 
 @NgModule({

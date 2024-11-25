@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Produto, ProdutoService } from '../../services/produto.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-relatorios-inventario',
@@ -13,26 +13,63 @@ export class RelatoriosInventarioComponent implements OnInit {
   produtosFiltrados: Produto[] = [];
   filtroNome: string = '';
   filtroStatus: string = '';
+  fornecedorId: number;
 
-  constructor(private produtoService: ProdutoService, private router: Router) {}
+  constructor(
+    private produtoService: ProdutoService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
+    this.fornecedorId = Number(
+      this.route.snapshot.paramMap.get('fornecedorId')
+    );
+
+    if (!this.fornecedorId) {
+      alert('Fornecedor não identificado');
+      this.router.navigate(['/fornecedores']);
+      return;
+    }
+
     this.listarTodosProdutos();
   }
 
   listarTodosProdutos(): void {
-    this.produtoService.listarTodos().subscribe(
-      (produtos) => {
+    this.produtoService.listarTodosPorFornecedor(this.fornecedorId).subscribe({
+      next: (produtos) => {
         this.produtos = produtos;
         this.produtosFiltrados = produtos;
       },
-      (error) => {
+      error: (error) => {
         console.error('Erro ao listar produtos:', error);
         alert('Erro ao carregar o relatório de inventário.');
-      }
-    );
+      },
+    });
   }
 
+  editarProduto(produtoId: number): void {
+    this.router.navigate([
+      `/${this.fornecedorId}/atualizacao-quantidade/${produtoId}`,
+    ]);
+  }
+
+  excluirProduto(produtoId: number): void {
+    if (confirm('Tem certeza que deseja excluir este produto?')) {
+      this.produtoService.deletar(this.fornecedorId, produtoId).subscribe({
+        next: () => {
+          alert('Produto excluído com sucesso!');
+          this.listarTodosProdutos();
+        },
+        error: (error) => {
+          console.error('Erro ao excluir produto:', error);
+          alert('Erro ao excluir o produto.');
+        },
+      });
+    }
+  }
+
+  // Os demais métodos permanecem iguais pois não dependem do fornecedorId
   obterStatusEstoque(quantidade: number): string {
     if (quantidade === 0) {
       return 'Sem Estoque';
@@ -54,25 +91,6 @@ export class RelatoriosInventarioComponent implements OnInit {
 
       return nomeCorresponde && statusCorresponde;
     });
-  }
-
-  editarProduto(id: number): void {
-    this.router.navigate([`/atualizacao-quantidade/${id}`]);
-  }
-
-  excluirProduto(id: number): void {
-    if (confirm('Tem certeza que deseja excluir este produto?')) {
-      this.produtoService.deletar(id).subscribe(
-        () => {
-          alert('Produto excluído com sucesso!');
-          this.listarTodosProdutos();
-        },
-        (error) => {
-          console.error('Erro ao excluir produto:', error);
-          alert('Erro ao excluir o produto.');
-        }
-      );
-    }
   }
 
   obterCorEstoque(quantidade: number): 'success' | 'warning' | 'danger' {

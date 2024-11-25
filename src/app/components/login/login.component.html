@@ -1,0 +1,50 @@
+<!-- login.component.html -->
+<div class="card">
+  <h2>Login do Fornecedor</h2>
+  <div class="grid p-fluid">
+    <div class="col-12">
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon">
+          <i class="pi pi-envelope"></i>
+        </span>
+        <input
+          type="email"
+          pInputText
+          [(ngModel)]="loginData.email"
+          placeholder="Email"
+          class="p-inputtext-lg"
+        />
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon">
+          <i class="pi pi-lock"></i>
+        </span>
+        <input
+          type="password"
+          pInputText
+          [(ngModel)]="loginData.senha"
+          placeholder="Senha"
+          class="p-inputtext-lg"
+        />
+      </div>
+    </div>
+
+    <div class="col-12">
+      <p-button
+        label="Entrar"
+        icon="pi pi-sign-in"
+        styleClass="p-button-success w-full"
+        (onClick)="login()"
+      ></p-button>
+    </div>
+
+    <div class="col-12 text-center mt-3">
+      <a routerLink="/cadastro-fornecedor">Não tem conta? Cadastre-se</a>
+    </div>
+  </div>
+</div>
+
+<p-toast></p-toast>

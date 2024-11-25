@@ -1,27 +1,101 @@
-<h2>Editar Fornecedor</h2>
-<div class="form-cadastro">
-  <label>Nome:</label>
-  <input type="text" pInputText [(ngModel)]="fornecedor.nome" />
+<!-- fornecedor-edicao.component.html -->
+<div class="card">
+  <h2>Perfil do Fornecedor</h2>
 
-  <label>Email:</label>
-  <input type="email" pInputText [(ngModel)]="fornecedor.email" />
+  <div class="profile-container">
+    <div class="info-item">
+      <label>Nome</label>
+      <div class="info-content">
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="fornecedor.nome"
+          [readonly]="editingField !== 'nome'"
+          class="p-inputtext-lg"
+        />
+        <i
+          class="pi"
+          [ngClass]="editingField === 'nome' ? 'pi-check' : 'pi-pencil'"
+          (click)="
+            editingField === 'nome' ? saveField('nome') : editField('nome')
+          "
+        ></i>
+      </div>
+    </div>
 
-  <label>Telefone:</label>
-  <input type="text" pInputText [(ngModel)]="fornecedor.telefone" />
+    <div class="info-item">
+      <label>Email</label>
+      <div class="info-content">
+        <input
+          type="email"
+          pInputText
+          [(ngModel)]="fornecedor.email"
+          [readonly]="editingField !== 'email'"
+          class="p-inputtext-lg"
+        />
+        <i
+          class="pi"
+          [ngClass]="editingField === 'email' ? 'pi-check' : 'pi-pencil'"
+          (click)="
+            editingField === 'email' ? saveField('email') : editField('email')
+          "
+        ></i>
+      </div>
+    </div>
 
-  <label>Endereço:</label>
-  <input type="text" pInputText [(ngModel)]="fornecedor.endereco" />
+    <div class="info-item">
+      <label>Telefone</label>
+      <div class="info-content">
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="fornecedor.telefone"
+          [readonly]="editingField !== 'telefone'"
+          class="p-inputtext-lg"
+        />
+        <i
+          class="pi"
+          [ngClass]="editingField === 'telefone' ? 'pi-check' : 'pi-pencil'"
+          (click)="
+            editingField === 'telefone'
+              ? saveField('telefone')
+              : editField('telefone')
+          "
+        ></i>
+      </div>
+    </div>
 
-  <p-button
-    label="Atualizar"
-    icon="pi pi-save"
-    (click)="atualizarFornecedor()"
-    class="p-button-success"
-  ></p-button>
-  <p-button
-    label="Voltar"
-    icon="pi pi-arrow-left"
-    routerLink="/fornecedores"
-    class="p-button-secondary"
-  ></p-button>
+    <div class="info-item">
+      <label>Endereço</label>
+      <div class="info-content">
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="fornecedor.endereco"
+          [readonly]="editingField !== 'endereco'"
+          class="p-inputtext-lg"
+        />
+        <i
+          class="pi"
+          [ngClass]="editingField === 'endereco' ? 'pi-check' : 'pi-pencil'"
+          (click)="
+            editingField === 'endereco'
+              ? saveField('endereco')
+              : editField('endereco')
+          "
+        ></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="button-container">
+    <p-button
+      label="Voltar"
+      icon="pi pi-arrow-left"
+      styleClass="p-button-secondary"
+      [routerLink]="['/', fornecedor.id]"
+    ></p-button>
+  </div>
 </div>
+
+<p-toast></p-toast>

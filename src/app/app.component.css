@@ -1,2 +1,42 @@
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
+.layout-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: var(--surface-card);
+    box-shadow: var(--card-shadow);
+
+    h1 {
+      margin: 0;
+      color: var(--primary-color);
+    }
+
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .greeting {
+        color: var(--text-color);
+        font-weight: 500;
+      }
+
+      .user-menu {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  .content {
+    flex: 1;
+    padding: 1rem;
+  }
+}

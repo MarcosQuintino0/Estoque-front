@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -6,10 +6,10 @@ export interface Fornecedor {
   id?: number;
   nome: string;
   email: string;
+  senha: string;
   telefone: string;
   endereco: string;
 }
-
 @Injectable({
   providedIn: 'root',
 })
@@ -26,8 +26,16 @@ export class FornecedorService {
     return this.http.get<Fornecedor>(`${this.apiUrl}/${id}`);
   }
 
-  criarFornecedor(fornecedor: Fornecedor): Observable<Fornecedor> {
-    return this.http.post<Fornecedor>(this.apiUrl, fornecedor);
+  criarFornecedor(fornecedor: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/cadastro`, fornecedor);
+  }
+
+  login(loginData: { email: string; senha: string }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login`, loginData, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    });
   }
 
   atualizarFornecedor(

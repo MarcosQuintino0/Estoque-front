@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 export interface Produto {
   id?: number;
+  fornecedorId: number;
   nome: string;
   descricao: string;
   quantidade: number;
@@ -18,29 +19,41 @@ export interface Produto {
   providedIn: 'root',
 })
 export class ProdutoService {
-  private apiUrl = 'http://localhost:8080/api/produtos';
+  private apiUrl = 'http://localhost:8080/api/fornecedores';
 
   constructor(private http: HttpClient) {}
 
-  listarTodos(): Observable<Produto[]> {
-    return this.http.get<Produto[]>(`${this.apiUrl}`);
+  listarTodosPorFornecedor(fornecedorId: number): Observable<Produto[]> {
+    return this.http.get<Produto[]>(`${this.apiUrl}/${fornecedorId}/produtos`);
   }
 
-  buscarPorId(id: number): Observable<Produto> {
-    return this.http.get<Produto>(`${this.apiUrl}/${id}`);
+  buscarPorId(fornecedorId: number, produtoId: number): Observable<Produto> {
+    return this.http.get<Produto>(
+      `${this.apiUrl}/${fornecedorId}/produtos/${produtoId}`
+    );
   }
 
-  salvar(produto: Produto): Observable<Produto> {
-    return this.http.post<Produto>(`${this.apiUrl}`, produto);
+  salvar(fornecedorId: number, produto: Produto): Observable<Produto> {
+    return this.http.post<Produto>(
+      `${this.apiUrl}/${fornecedorId}/produtos`,
+      produto
+    );
   }
 
-  // Atualizar produto existente
-  atualizar(id: number, produto: Produto): Observable<Produto> {
-    return this.http.put<Produto>(`${this.apiUrl}/${id}`, produto);
+  atualizar(
+    fornecedorId: number,
+    produtoId: number,
+    produto: Produto
+  ): Observable<Produto> {
+    return this.http.put<Produto>(
+      `${this.apiUrl}/${fornecedorId}/produtos/${produtoId}`,
+      produto
+    );
   }
 
-  // Deletar produto por ID
-  deletar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  deletar(fornecedorId: number, produtoId: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/${fornecedorId}/produtos/${produtoId}`
+    );
   }
 }

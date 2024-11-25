@@ -4,6 +4,7 @@ import {
   Movimentacao,
   MovimentacaoService,
 } from '../../services/movimentacao.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface City {
   name: string;
@@ -16,22 +17,41 @@ interface City {
   templateUrl: './historico-movimentacao.component.html',
   styleUrl: './historico-movimentacao.component.css',
 })
-export class HistoricoMovimentacaoComponent {
+export class HistoricoMovimentacaoComponent implements OnInit {
   public movimentacoes: Movimentacao[] = [];
+  fornecedorId: number;
 
   constructor(
     private movimentacaoService: MovimentacaoService,
-    private produtoService: ProdutoService
+    private produtoService: ProdutoService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.fornecedorId = Number(
+      this.route.snapshot.paramMap.get('fornecedorId')
+    );
+
+    if (!this.fornecedorId) {
+      alert('Fornecedor não identificado');
+      this.router.navigate(['/fornecedores']);
+      return;
+    }
+
     this.carregarHistoricoMovimentacoes();
   }
 
   carregarHistoricoMovimentacoes(): void {
-    this.movimentacaoService.listarTodas().subscribe((movimentacoes) => {
-      console.log('Dados recebidos:', movimentacoes); // Adiciona log para verificar os dados
-      this.movimentacoes = movimentacoes; // Atualiza a variável movimentacoes com os dados recebidos
+    this.movimentacaoService.listarPorFornecedor(this.fornecedorId).subscribe({
+      next: (movimentacoes) => {
+        console.log('Movimentações recebidas:', movimentacoes);
+        this.movimentacoes = movimentacoes;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar movimentações:', error);
+        alert('Erro ao carregar histórico de movimentações.');
+      },
     });
   }
 }
