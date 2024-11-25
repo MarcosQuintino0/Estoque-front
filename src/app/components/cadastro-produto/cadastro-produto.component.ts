@@ -53,51 +53,70 @@ export class CadastroProdutoComponent implements OnInit {
     now.setHours(now.getHours() - 3);
     this.produto.atualizacao = now;
 
-    if (this.validarProduto()) {
-      this.produtoService.salvar(this.fornecedorId, this.produto).subscribe({
-        next: (response) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Sucesso',
-            detail: 'Produto cadastrado com sucesso!',
-          });
-          this.resetarFormulario();
-        },
-        error: (error) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erro',
-            detail: 'Erro ao cadastrar produto',
-          });
-          console.error('Erro:', error);
-        },
-      });
-    }
-  }
-
-  validarProduto(): boolean {
-    if (
-      !this.produto.nome ||
-      !this.produto.descricao ||
-      !this.produto.validade
-    ) {
+    if (!this.produto.nome.trim()) {
       this.messageService.add({
         severity: 'warn',
         summary: 'Atenção',
-        detail: 'Preencha todos os campos obrigatórios',
+        detail: 'O nome do produto é obrigatório',
       });
-      return false;
+      return;
     }
-    return true;
-  }
 
-  calcularMargemLucro(): void {
-    const { custo, preco } = this.produto;
-    if (custo !== null && preco !== null && preco > 0) {
-      this.margemLucro = ((preco - custo) / preco) * 100;
-    } else {
-      this.margemLucro = 0;
+    if (!this.produto.validade) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'A data de validade é obrigatória',
+      });
+      return;
     }
+
+    if (this.produto.quantidade <= 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'A quantidade deve ser maior que zero',
+      });
+      return;
+    }
+
+    if (this.produto.custo <= 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'O custo deve ser maior que zero',
+      });
+      return;
+    }
+
+    if (this.produto.preco <= this.produto.custo) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'O preço deve ser maior que o custo',
+      });
+      return;
+    }
+
+    if (this.produto.margemLucro <= 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'A margem de lucro deve ser maior que zero',
+      });
+      return;
+    }
+
+    this.produtoService.salvar(this.fornecedorId, this.produto).subscribe({
+      next: (response) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Produto cadastrado com sucesso!',
+        });
+        this.resetarFormulario();
+      },
+    });
   }
 
   resetarFormulario(): void {
@@ -116,5 +135,82 @@ export class CadastroProdutoComponent implements OnInit {
       fornecedorId: this.fornecedorId,
     };
     this.margemLucro = 0;
+  }
+
+  validarCampo(campo: string): void {
+    switch (campo) {
+      case 'nome':
+        if (!this.produto.nome.trim()) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Atenção',
+            detail: 'O nome do produto é obrigatório',
+          });
+        }
+        break;
+
+      case 'descricao':
+        if (!this.produto.descricao.trim()) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Atenção',
+            detail: 'A descrição do produto é obrigatória',
+          });
+        }
+        break;
+
+      case 'validade':
+        if (!this.produto.validade) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Atenção',
+            detail: 'A data de validade é obrigatória',
+          });
+        }
+        break;
+
+      case 'quantidade':
+        if (this.produto.quantidade <= 0) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Atenção',
+            detail: 'A quantidade deve ser maior que zero',
+          });
+        }
+        break;
+
+      case 'custo':
+        if (this.produto.custo <= 0) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Atenção',
+            detail: 'O custo deve ser maior que zero',
+          });
+        }
+        break;
+    }
+  }
+
+  validarPrecoECalcularMargem(): void {
+    if (this.produto.preco <= this.produto.custo) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'O preço deve ser maior que o custo',
+      });
+      return;
+    }
+    this.calcularMargemLucro();
+  }
+
+  calcularMargemLucro(): void {
+    const { custo, preco } = this.produto;
+    if (custo > 0 && preco > custo) {
+      this.margemLucro = ((preco - custo) / preco) * 100;
+      this.produto.margemLucro = this.margemLucro;
+    } else {
+      this.margemLucro = 0;
+      this.produto.margemLucro = 0;
+    }
   }
 }

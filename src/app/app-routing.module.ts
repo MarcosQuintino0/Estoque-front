@@ -18,7 +18,7 @@ const routes: Routes = [
     path: ':fornecedorId',
     canActivate: [AuthGuard],
     children: [
-      { path: '', component: TelaInicioComponent }, // Tela inicial dentro da área protegida
+      { path: '', component: TelaInicioComponent },
       {
         path: 'relatorios-inventario',
         component: RelatoriosInventarioComponent,
@@ -33,10 +33,13 @@ const routes: Routes = [
         component: HistoricoMovimentacaoComponent,
       },
       { path: 'editar-perfil', component: FornecedorEdicaoComponent },
+      // Redireciona qualquer rota não encontrada dentro da área do fornecedor para a tela inicial
+      { path: '**', redirectTo: '' },
     ],
   },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }, // Redireciona para login se não houver rota
-  { path: '**', redirectTo: 'login' }, // Rota para página não encontrada
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  // Redireciona qualquer outra rota não encontrada para login
+  { path: '**', redirectTo: 'login' },
 ];
 
 @NgModule({

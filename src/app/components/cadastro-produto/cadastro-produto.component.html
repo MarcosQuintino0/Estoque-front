@@ -1,20 +1,35 @@
 <h2>Cadastro de Produtos</h2>
 <div class="form-cadastro">
   <label>Nome:</label>
-  <input type="text" pInputText [(ngModel)]="produto.nome" />
+  <input
+    type="text"
+    pInputText
+    [(ngModel)]="produto.nome"
+    (blur)="validarCampo('nome')"
+  />
 
   <label>Descrição:</label>
-  <input type="text" pInputText [(ngModel)]="produto.descricao" />
+  <input
+    type="text"
+    pInputText
+    [(ngModel)]="produto.descricao"
+    (blur)="validarCampo('descricao')"
+  />
 
   <label>Data de Validade:</label>
-  <input type="date" pInputText [(ngModel)]="produto.validade" />
+  <input
+    type="date"
+    pInputText
+    [(ngModel)]="produto.validade"
+    (blur)="validarCampo('validade')"
+  />
 
   <label>Custo:</label>
   <input
     type="number"
     pInputText
     [(ngModel)]="produto.custo"
-    (input)="calcularMargemLucro()"
+    (blur)="validarCampo('custo')"
     placeholder="Informe o custo"
   />
 
@@ -23,7 +38,7 @@
     type="number"
     pInputText
     [(ngModel)]="produto.preco"
-    (input)="calcularMargemLucro()"
+    (blur)="validarPrecoECalcularMargem()"
     placeholder="Informe o preço de venda"
   />
 
@@ -36,7 +51,12 @@
   />
 
   <label>Quantidade:</label>
-  <input type="number" pInputText [(ngModel)]="produto.quantidade" />
+  <input
+    type="number"
+    pInputText
+    [(ngModel)]="produto.quantidade"
+    (blur)="validarCampo('quantidade')"
+  />
 
   <p-button
     label="Salvar"
@@ -47,7 +67,9 @@
   <p-button
     label="Voltar"
     icon="pi pi-arrow-left"
-    routerLink="/"
+    routerLink=".."
     class="p-button-secondary"
   ></p-button>
 </div>
+
+<p-toast></p-toast>
