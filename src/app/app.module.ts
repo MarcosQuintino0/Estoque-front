@@ -27,6 +27,7 @@ import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { MenuModule } from 'primeng/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PasswordModule } from 'primeng/password';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MessagesModule,
     CardModule,
     MenuModule,
+    PasswordModule,
   ],
   providers: [MessageService],
   bootstrap: [AppComponent],

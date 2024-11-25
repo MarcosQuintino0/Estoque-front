@@ -34,15 +34,16 @@
     <div class="col-12 md:col-6">
       <div class="p-inputgroup">
         <span class="p-inputgroup-addon">
-          <i class="pi pi-envelope"></i>
+          <i class="pi pi-lock"></i>
         </span>
-        <input
-          type="password"
-          pInputText
+        <p-password
           [(ngModel)]="fornecedor.senha"
+          [toggleMask]="true"
           placeholder="Senha"
-          class="p-inputtext-lg"
-        />
+          [style]="{ width: '100%' }"
+          [inputStyle]="{ width: '100%' }"
+          styleClass="p-inputtext-lg"
+        ></p-password>
       </div>
     </div>
 
